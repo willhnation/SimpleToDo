@@ -39,6 +39,10 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Describe any challenges encountered while building the app.
 
+## TODO (haha...)
+
+* [ ] Complete optional checklist by **June 28th**
+
 ## License
 
     Copyright 2016 Will Nation
