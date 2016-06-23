@@ -1,5 +1,6 @@
 package com.example.wnati.simpletodo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems; //list view handle
+
+    private final int EDIT_REQUEST = 20;
+    private final int EDIT_FAIL = 30;
 
     @Override
     /*
@@ -52,6 +56,28 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*
+             * add a ClickListener for each Item in the ListView
+             * this will allow for the Item to be edited
+             */
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
+
+                /*
+                 * start the EditItemActivity
+                 * pass along the Item's pos and text
+                 */
+                Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+                i.putExtra("description", item.toString());
+                i.putExtra("pos", pos);
+
+                // start EditItemActivity
+                startActivityForResult(i, EDIT_REQUEST);
+            }
+
+        });
     }
 
     /*
@@ -84,6 +110,19 @@ public class MainActivity extends AppCompatActivity {
             FileUtils.writeLines(todoFile, items);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == EDIT_REQUEST) {
+            String task = data.getExtras().getString("task");
+            int pos = data.getExtras().getInt("pos", -1);
+
+            // update the Item's text and save changes
+            items.set(pos, task);
+            itemsAdapter.notifyDataSetChanged();
+            writeItems();
         }
     }
 }
