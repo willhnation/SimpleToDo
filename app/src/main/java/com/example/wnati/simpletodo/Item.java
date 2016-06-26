@@ -15,8 +15,6 @@ import java.util.ArrayList;
  */
 @Table(name = "Items")
 public class Item extends Model {
-    @Column(name = "item_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
-    public long item_id;
 
     @Column(name = "text")
     public String text;
